@@ -321,4 +321,144 @@ export default function App() {
       <p style={{ margin: 0, fontSize: 11, color: '#8A4B00' }}>💵 À encaisser en espèces {isExpedition ? "à l'agence" : 'à la livraison'}</p>
     </div>
   )
-    }
+    }function TrackingScreen({ total, deliveryType, expressDistanceKm, villeName, onNewOrder }) {
+  const isExpress = deliveryType === 'express'
+  const isExpedition = deliveryType === 'expedition'
+  const accentColor = isExpedition ? '#1E88E5' : isExpress ? COLORS.orange : COLORS.emerald
+  return (
+    <div>
+      <div style={{ background: COLORS.card, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 16px', borderBottom: `1px solid ${COLORS.border}` }}>
+        <span style={{ fontSize: 15, fontWeight: 600 }}>Suivi de commande</span>
+      </div>
+
+      <div style={{ padding: '16px 12px 0', textAlign: 'center' }}>
+        <div style={{ width: 48, height: 48, background: '#EAF3DE', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 8px', fontSize: 22, color: COLORS.emerald }}>
+          ✔
+        </div>
+        <p style={{ margin: 0, fontSize: 13, color: COLORS.textMuted }}>Commande confirmée</p>
+        <p style={{ margin: '4px 0 0', fontSize: 12, color: accentColor, fontWeight: 600 }}>
+          {isExpedition
+            ? `🚚 Expédition vers ${villeName || 'votre ville'}`
+            : isExpress
+              ? `⚡ Livraison express${expressDistanceKm ? ` — ${expressDistanceKm} km` : ''}`
+              : '📦 Livraison standard — aujourd\'hui avant 18h'}
+        </p>
+      </div>
+
+      {total > 0 && (
+        <div style={{ margin: '14px 12px 0', background: '#FFF3E0', border: '1px solid #FFD9A8', borderRadius: 14, padding: '12px 14px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <span style={{ fontSize: 12, color: '#8A4B00' }}>💵 À régler {isExpedition ? "à l'agence" : 'à la livraison'}</span>
+          <span style={{ fontSize: 15, fontWeight: 600, color: '#8A4B00' }}>{total.toLocaleString('fr-FR')} FCFA</span>
+        </div>
+      )}
+
+      <div style={{ padding: '18px 20px 4px' }}>
+        <TimelineStep label="Commande validée" state="done" />
+        <TimelineStep
+          label={isExpedition ? 'Préparation pour expédition' : isExpress ? 'Coursier en préparation' : 'Préparation de la commande'}
+          sub={isExpedition ? `Envoi vers l'agence de ${villeName || 'votre ville'}` : isExpress ? 'Prise en charge par un coursier disponible' : 'Livraison prévue aujourd\'hui avant 18h'}
+          state="current"
+        />
+        <TimelineStep label={isExpedition ? 'En transit vers votre ville' : 'En route avec le livreur'} state="pending" />
+        <TimelineStep label={isExpedition ? 'Arrivé à l\'agence — à récupérer' : 'Livré'} state="pending" last />
+      </div>
+
+      <div style={{ padding: '16px 12px' }}>
+        <button
+          onClick={onNewOrder}
+          style={{ width: '100%', background: 'transparent', color: COLORS.emerald, textAlign: 'center', fontSize: 13, fontWeight: 600, padding: 12, borderRadius: 14, border: `1px solid ${COLORS.emerald}` }}
+        >
+          Passer une nouvelle commande
+        </button>
+      </div>
+    </div>
+  )
+}
+
+function TimelineStep({ label, sub, state, last }) {
+  const color = state === 'done' ? COLORS.emerald : state === 'current' ? COLORS.orange : '#D3D1C7'
+  return (
+    <div style={{ display: 'flex', gap: 10, marginBottom: last ? 0 : 18 }}>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <div style={{ width: 20, height: 20, borderRadius: '50%', background: state === 'pending' ? '#fff' : color, border: state === 'pending' ? '1.5px solid #D3D1C7' : 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, color: '#fff' }}>
+          {state === 'done' ? '✔' : ''}
+        </div>
+        {!last && <div style={{ width: 1.5, flex: 1, background: state === 'done' ? COLORS.emerald : '#D3D1C7', marginTop: 2 }} />}
+      </div>
+      <div style={{ paddingBottom: 2 }}>
+        <p style={{ margin: 0, fontSize: 13, fontWeight: state === 'pending' ? 400 : 600, color: state === 'pending' ? COLORS.textFaint : '#2C2C2A' }}>{label}</p>
+        {sub && <p style={{ margin: 0, fontSize: 11, color: COLORS.textFaint }}>{sub}</p>}
+      </div>
+    </div>
+  )
+                 }function TrackingScreen({ total, deliveryType, expressDistanceKm, villeName, onNewOrder }) {
+  const isExpress = deliveryType === 'express'
+  const isExpedition = deliveryType === 'expedition'
+  const accentColor = isExpedition ? '#1E88E5' : isExpress ? COLORS.orange : COLORS.emerald
+  return (
+    <div>
+      <div style={{ background: COLORS.card, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 16px', borderBottom: `1px solid ${COLORS.border}` }}>
+        <span style={{ fontSize: 15, fontWeight: 600 }}>Suivi de commande</span>
+      </div>
+
+      <div style={{ padding: '16px 12px 0', textAlign: 'center' }}>
+        <div style={{ width: 48, height: 48, background: '#EAF3DE', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 8px', fontSize: 22, color: COLORS.emerald }}>
+          ✔
+        </div>
+        <p style={{ margin: 0, fontSize: 13, color: COLORS.textMuted }}>Commande confirmée</p>
+        <p style={{ margin: '4px 0 0', fontSize: 12, color: accentColor, fontWeight: 600 }}>
+          {isExpedition
+            ? `🚚 Expédition vers ${villeName || 'votre ville'}`
+            : isExpress
+              ? `⚡ Livraison express${expressDistanceKm ? ` — ${expressDistanceKm} km` : ''}`
+              : '📦 Livraison standard — aujourd\'hui avant 18h'}
+        </p>
+      </div>
+
+      {total > 0 && (
+        <div style={{ margin: '14px 12px 0', background: '#FFF3E0', border: '1px solid #FFD9A8', borderRadius: 14, padding: '12px 14px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <span style={{ fontSize: 12, color: '#8A4B00' }}>💵 À régler {isExpedition ? "à l'agence" : 'à la livraison'}</span>
+          <span style={{ fontSize: 15, fontWeight: 600, color: '#8A4B00' }}>{total.toLocaleString('fr-FR')} FCFA</span>
+        </div>
+      )}
+
+      <div style={{ padding: '18px 20px 4px' }}>
+        <TimelineStep label="Commande validée" state="done" />
+        <TimelineStep
+          label={isExpedition ? 'Préparation pour expédition' : isExpress ? 'Coursier en préparation' : 'Préparation de la commande'}
+          sub={isExpedition ? `Envoi vers l'agence de ${villeName || 'votre ville'}` : isExpress ? 'Prise en charge par un coursier disponible' : 'Livraison prévue aujourd\'hui avant 18h'}
+          state="current"
+        />
+        <TimelineStep label={isExpedition ? 'En transit vers votre ville' : 'En route avec le livreur'} state="pending" />
+        <TimelineStep label={isExpedition ? 'Arrivé à l\'agence — à récupérer' : 'Livré'} state="pending" last />
+      </div>
+
+      <div style={{ padding: '16px 12px' }}>
+        <button
+          onClick={onNewOrder}
+          style={{ width: '100%', background: 'transparent', color: COLORS.emerald, textAlign: 'center', fontSize: 13, fontWeight: 600, padding: 12, borderRadius: 14, border: `1px solid ${COLORS.emerald}` }}
+        >
+          Passer une nouvelle commande
+        </button>
+      </div>
+    </div>
+  )
+}
+
+function TimelineStep({ label, sub, state, last }) {
+  const color = state === 'done' ? COLORS.emerald : state === 'current' ? COLORS.orange : '#D3D1C7'
+  return (
+    <div style={{ display: 'flex', gap: 10, marginBottom: last ? 0 : 18 }}>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <div style={{ width: 20, height: 20, borderRadius: '50%', background: state === 'pending' ? '#fff' : color, border: state === 'pending' ? '1.5px solid #D3D1C7' : 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, color: '#fff' }}>
+          {state === 'done' ? '✔' : ''}
+        </div>
+        {!last && <div style={{ width: 1.5, flex: 1, background: state === 'done' ? COLORS.emerald : '#D3D1C7', marginTop: 2 }} />}
+      </div>
+      <div style={{ paddingBottom: 2 }}>
+        <p style={{ margin: 0, fontSize: 13, fontWeight: state === 'pending' ? 400 : 600, color: state === 'pending' ? COLORS.textFaint : '#2C2C2A' }}>{label}</p>
+        {sub && <p style={{ margin: 0, fontSize: 11, color: COLORS.textFaint }}>{sub}</p>}
+      </div>
+    </div>
+  )
+                     }
